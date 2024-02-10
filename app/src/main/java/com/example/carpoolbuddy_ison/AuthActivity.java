@@ -2,6 +2,7 @@ package com.example.carpoolbuddy_ison;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,92 +15,84 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AuthActivity extends AppCompatActivity {
-
-    private static final int RC_SIGN_IN = 123;
-
-    private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
+
+    private EditText emailField;
+    private EditText passwordField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
-        // Set up Google sign in
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        // Set up Firebase auth and Firestore instances
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
+
+        emailField = findViewById(R.id.editTextEmail);
+        passwordField = findViewById(R.id.editTextPassword);
+
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            startActivity(new Intent(AuthActivity.this, UserProfileActivity.class));
+    public void updateUI(FirebaseUser currentUser){
+        if(currentUser != null){
+            Intent intent = new Intent(this, UserProfileActivity.class);
+            startActivity(intent);
             finish();
         }
     }
 
-    public void signIn(View v) {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+    public void signup(View V){
+        Intent intent = new Intent(this, CreateUserActivity.class);
+        startActivity(intent);
     }
+    public void signIn(View V) {
+        String userEmail = emailField.getText().toString();
+        String userPassword = passwordField.getText().toString();
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult();
-                firebaseAuthWithGoogle(account.getIdToken());
-            } catch (Exception e) {
-                Toast.makeText(this, "Google sign-in failed", Toast.LENGTH_SHORT).show();
-            }
+        if (userEmail.isEmpty() || userPassword.isEmpty()) {
+            showToast("Please fill in all required fields.");
+            return;
         }
-    }
 
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            uploadData(user);
-                            updateUI(user);
-                        } else {
-                            Toast.makeText(AuthActivity.this, "Authentication failed",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
+        mAuth.signInWithEmailAndPassword(userEmail, userPassword)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        showToast("Successfully signed in");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateUI(user);
+                    } else {
+                        showToast("Sign in failed.");
+                        updateUI(null);
                     }
                 });
     }
 
-    private void uploadData(FirebaseUser user) {
-        // TODO: Implement data upload to Firestore based on user role
+    public void showToast(String message){
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+    public void onStart() {
+        super.onStart();
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        if(currentUser != null) {
+//            Intent intent = new Intent(this, UserProfileActivity.class);
+//            startActivity(intent);
+//        }
     }
 
-    private void updateUI(FirebaseUser user) {
-        if (user != null) {
-            startActivity(new Intent(AuthActivity.this, UserProfileActivity.class));
-            finish();
-        }
-    }
+//    public void signIn(View V){
+//        System.out.println("Log In");
+//        String emailString = emailField.getText().toString();
+//        String passwordString = passwordField.getText().toString();
+//        System.out.println(String.format("email: %s and password: %s", emailString, passwordString));
+//
+//        FirebaseUser mUser = mAuth.getCurrentUser();
+//        updateUI(mUser);
+//    }
+
+
 }

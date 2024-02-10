@@ -3,16 +3,65 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="AuthActivity"
+    android:background="@drawable/carpool_login">
 
-    <Button
-        android:id="@+id/button"
+    <EditText
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:id="@+id/editTextPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Google Sign in"
+        android:ems="10"
+        android:hint="password"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.688" />
+        app:layout_constraintVertical_bias="0.72"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/loginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/btn_background"
+        android:onClick="signIn"
+        android:text="Log In"
+        app:layout_constraintStart_toStartOf="@+id/editTextPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+
+    <EditText
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:id="@+id/editTextEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="email"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.616"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/signupButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:onClick="signup"
+        android:text="Sign Up"
+        android:background="@drawable/btn_background"
+        app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 </androidx.constraintlayout.widget.ConstraintLayout>

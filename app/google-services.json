@@ -1,18 +1,24 @@
 {
   "project_info": {
     "project_number": "25168176899",
+    "firebase_url": "https://carpoolbuddy-ison-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "carpoolbuddy-ison",
     "storage_bucket": "carpoolbuddy-ison.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:25168176899:android:a0210cb9d437869233ab36",
+        "mobilesdk_app_id": "1:25168176899:android:bb3592c2dae230ac33ab36",
         "android_client_info": {
-          "package_name": "com.example.carpoolbuddy_ison"
+          "package_name": "com.company.c"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "25168176899-qac3a77otcb6fkhbu5f341497e81l0kl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA6P9W90Ww0oMbeNHOzQJAWIUMn9Bt7zCQ"
@@ -20,7 +26,49 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "25168176899-qac3a77otcb6fkhbu5f341497e81l0kl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25168176899:android:a0210cb9d437869233ab36",
+        "android_client_info": {
+          "package_name": "com.example.carpoolbuddy_ison"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "25168176899-h4eac4tdmpdetobeh6hnt0qhsj6qnnab.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.carpoolbuddy_ison",
+            "certificate_hash": "d8ceaa06a60a761870d30e06ad6256e30abf7554"
+          }
+        },
+        {
+          "client_id": "25168176899-qac3a77otcb6fkhbu5f341497e81l0kl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6P9W90Ww0oMbeNHOzQJAWIUMn9Bt7zCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "25168176899-qac3a77otcb6fkhbu5f341497e81l0kl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
