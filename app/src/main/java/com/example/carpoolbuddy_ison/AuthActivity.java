@@ -53,7 +53,10 @@ public class AuthActivity extends AppCompatActivity {
     public void signIn(View V) {
         String userEmail = emailField.getText().toString();
         String userPassword = passwordField.getText().toString();
-
+        if (!userEmail.endsWith("cis.edu.hk")) {
+            showToast("Please use a valid 'cis.edu.hk' email address.");
+            return;
+        }
         if (userEmail.isEmpty() || userPassword.isEmpty()) {
             showToast("Please fill in all required fields.");
             return;

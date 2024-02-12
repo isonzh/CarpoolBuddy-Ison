@@ -99,6 +99,14 @@ public class Vehicle implements Parcelable {
     public boolean isOpen() {
         return open;
     }
+    public String getOpen(){
+        if(open=true){
+            return "open";
+        }
+        else{
+            return "close";
+        }
+    }
 
     public void setOpen(boolean open) {
         this.open = open;

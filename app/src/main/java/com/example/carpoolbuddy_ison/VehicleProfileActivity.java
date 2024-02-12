@@ -6,14 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class VehicleProfileActivity extends AppCompatActivity implements View.OnClickListener{
@@ -38,9 +41,8 @@ public class VehicleProfileActivity extends AppCompatActivity implements View.On
         firestore = FirebaseFirestore.getInstance();
 
         if(getIntent().hasExtra("vehicle")) {
-            selectedVehicle = (Vehicle) getIntent().getParcelableExtra("vehicle");
+            selectedVehicle = getIntent().getParcelableExtra("vehicle");
 
-            //Common fields
             vehicleTypeTextView = findViewById(R.id.vehicleTypeDataTextView);
             ownerTextView = findViewById(R.id.ownerDataTextView);
             modelTextView = findViewById(R.id.modelDataTextView);
@@ -56,39 +58,77 @@ public class VehicleProfileActivity extends AppCompatActivity implements View.On
             remainingCapacityTextView.setText(String.valueOf(selectedVehicle.getRemainingCapacity()));
             basePriceTextView.setText(String.valueOf(selectedVehicle.getBasePrice()));
             bookedUIDs.setText(selectedVehicle.getRidersUIDs().toString());
-
         }
         bookRideButton = findViewById(R.id.bookRideButton);
         bookRideButton.setOnClickListener(this);
-    }
-
-    public void bookTheRide() {
-        if(selectedVehicle.getRemainingCapacity() == 1) {
-            firestore.collection("vehicles").document(selectedVehicle.getVehicleID())
-                    .update("open", false);
-        }
-
-        firestore.collection("vehicles").document(selectedVehicle.getVehicleID())
-                .update("remainingCapacity", selectedVehicle.getRemainingCapacity() - 1);
-
-        selectedVehicle.addRidersUIDs(mAuth.getUid());
-        firestore.collection("vehicles").document(selectedVehicle.getVehicleID())
-                .update("ridersUIDs", selectedVehicle.getRidersUIDs())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Intent intent = new Intent(getApplicationContext(), VehicleInfoActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
     }
 
     @Override
     public void onClick(View v) {
         int i = v.getId();
         if(i == bookRideButton.getId()) {
-            bookTheRide();
+            String userId = mAuth.getUid();
+            firestore.collection("users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot snapshot = task.getResult();
+                        if (snapshot != null && snapshot.exists()) {
+                            try {
+                                Long balanceDouble = snapshot.getLong("balance");
+                                if (balanceDouble != null) {
+                                    int balance = balanceDouble.intValue();
+                                    proceedWithBooking(balance);
+                                } else {
+                                    Log.e("DataRetrieval", "Balance is null or not in correct format");
+                                }
+                            } catch (Exception e) {
+                                Log.e("ConversionError", "Error converting balance to double", e);
+                            }
+                        } else {
+                            Log.e("DataRetrieval", "No document exists for the user");
+                        }
+                    } else {
+                        Log.e("FirestoreTask", "Task failed with exception", task.getException());
+                    }
+                }
+            });
+        }
+    }
+
+    private void proceedWithBooking(int balance) {
+        if (balance == 0) {
+            Toast.makeText(this,"BookingError User balance is 0, cannot book",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(selectedVehicle.getRemainingCapacity() == 1) {
+            firestore.collection("vehicles").document(selectedVehicle.getVehicleID())
+                    .update("open", false);
+        }
+
+        double basePrice = selectedVehicle.getBasePrice();
+        if (balance >= basePrice) {
+            double newBalance = balance - basePrice;
+            firestore.collection("users").document(mAuth.getUid())
+                    .update("balance", newBalance);
+
+            firestore.collection("vehicles").document(selectedVehicle.getVehicleID())
+                    .update("remainingCapacity", selectedVehicle.getRemainingCapacity() - 1);
+
+            selectedVehicle.addRidersUIDs(mAuth.getUid());
+            firestore.collection("vehicles").document(selectedVehicle.getVehicleID())
+                    .update("ridersUIDs", selectedVehicle.getRidersUIDs())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Intent intent = new Intent(getApplicationContext(), VehicleInfoActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "BookingError Insufficient balance to book ride", Toast.LENGTH_SHORT).show();
         }
     }
 

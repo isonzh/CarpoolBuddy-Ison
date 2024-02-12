@@ -2,7 +2,14 @@ package com.example.carpoolbuddy_ison;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.carpoolbuddy_ison.classDictionary.*;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
+import com.example.carpoolbuddy_ison.classDictionary.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -11,21 +18,17 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Transaction;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-
 public class AddBalanceActivity extends AppCompatActivity {
-    TextView balance=findViewById(R.id.balance);
-
-
+    private TextView balance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_balance);
+
+        // 初始化TextView
+        balance = findViewById(R.id.balance);
+
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseFirestore firebase = FirebaseFirestore.getInstance();
 
@@ -63,12 +66,13 @@ public class AddBalanceActivity extends AppCompatActivity {
             // Handle the case where userId is null
             Log.e("AuthError", "User ID is null");
         }
-
     }
-    public void goToUserProfileActivity(View V){
+
+    public void goToUserProfileActivity(View v) {
         Intent intent = new Intent(this, UserProfileActivity.class);
         startActivity(intent);
     }
+
     public void addBalance(int amountToAdd) {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseFirestore firebase = FirebaseFirestore.getInstance();
@@ -109,10 +113,8 @@ public class AddBalanceActivity extends AppCompatActivity {
             Log.e("AuthError", "User ID is null");
         }
     }
-    public void addBalance(View v){
- addBalance(100);
 
+    public void addBalance(View v) {
+        addBalance(100);
     }
-
-
 }

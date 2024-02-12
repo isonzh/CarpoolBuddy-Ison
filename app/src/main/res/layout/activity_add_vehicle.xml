@@ -7,7 +7,6 @@
     tools:context="AddVehicleActivity">
 
     <Spinner
-        android:background=""
         android:id="@+id/vehicleSpinner"
         android:layout_width="409dp"
         android:layout_height="wrap_content"

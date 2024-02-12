@@ -140,7 +140,10 @@ public class CreateUserActivity extends AppCompatActivity {
         String roleString = roleSelected;
         String gradYearInt = gradYearField.getText().toString();
         int balance=100;
-
+        if (!emailString.endsWith("cis.edu.hk")) {
+            Toast.makeText(CreateUserActivity.this,"Use a cis email",Toast.LENGTH_SHORT).show();
+            return;
+        }
 
 
 

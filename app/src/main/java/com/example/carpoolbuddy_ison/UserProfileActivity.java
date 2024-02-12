@@ -81,4 +81,8 @@ public class UserProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(this,AddBalanceActivity.class);
         startActivity(intent);
     }
+    public void OpenClose(View v){
+        Intent intent = new Intent(this,OpenCloseActivity.class);
+        startActivity(intent);
+    }
 }
