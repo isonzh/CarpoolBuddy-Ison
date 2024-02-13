@@ -6,6 +6,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -80,22 +82,10 @@ public class AuthActivity extends AppCompatActivity {
     }
     public void onStart() {
         super.onStart();
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if(currentUser != null) {
-//            Intent intent = new Intent(this, UserProfileActivity.class);
-//            startActivity(intent);
-//        }
     }
-
-//    public void signIn(View V){
-//        System.out.println("Log In");
-//        String emailString = emailField.getText().toString();
-//        String passwordString = passwordField.getText().toString();
-//        System.out.println(String.format("email: %s and password: %s", emailString, passwordString));
-//
-//        FirebaseUser mUser = mAuth.getCurrentUser();
-//        updateUI(mUser);
-//    }
-
+    public void goToForgotPassword(View V){
+        Intent intent = new Intent(this, ForgotPasswordActivity.class);
+        startActivity(intent);
+    }
 
 }

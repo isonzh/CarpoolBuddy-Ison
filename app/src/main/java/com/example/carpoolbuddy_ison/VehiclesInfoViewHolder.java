@@ -16,6 +16,8 @@ public class VehiclesInfoViewHolder extends RecyclerView.ViewHolder implements V
 
     public TextView balance;
 
+    public TextView costText;
+
     private OnVehicleListener onVehicleListener;
 
     public VehiclesInfoViewHolder(@NonNull View itemView, OnVehicleListener onVehicleListener) {
@@ -25,7 +27,7 @@ public class VehiclesInfoViewHolder extends RecyclerView.ViewHolder implements V
         capacityText = itemView.findViewById(R.id.capacityTextView);
         this.onVehicleListener = onVehicleListener;
         itemView.setOnClickListener(this);
-        balance=itemView.findViewById(R.id.balance);
+        costText = itemView.findViewById(R.id.cost);
     }
 
     @Override

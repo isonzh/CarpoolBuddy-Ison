@@ -6,6 +6,7 @@ plugins {
 android {
     namespace = "com.example.carpoolbuddy_ison"
     compileSdk = 34
+    
 
     defaultConfig {
         minSdk = 24

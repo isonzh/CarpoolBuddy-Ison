@@ -47,42 +47,7 @@ public class VehiclesInfoAdapter extends RecyclerView.Adapter<VehiclesInfoViewHo
     public void onBindViewHolder(@NonNull VehiclesInfoViewHolder holder, int position) {
         holder.ownerText.setText(mData.get(position).getOwner());
         holder.capacityText.setText(String.valueOf(mData.get(position).getRemainingCapacity()));
-//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//        FirebaseFirestore firebase = FirebaseFirestore.getInstance();
-//        String userId = mAuth.getUid();
-//        if (userId != null) {
-//            firebase.collection("users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    if (task.isSuccessful()) {
-//                        DocumentSnapshot snapshot = task.getResult();
-//                        if (snapshot != null && snapshot.exists()) {
-//                            try {
-//                                User user = snapshot.toObject(User.class);
-//                                Long balanceLong = snapshot.getLong("balance");
-//                                if (balanceLong != null) {
-//                                    int bal = balanceLong.intValue();
-//                                    // Assuming balance is a TextView, update its value
-//                                    holder.balance.setText(String.valueOf(bal));
-//                                } else {
-//                                    // Handle the case where balance is null or not an integer
-//                                    Log.e("DataRetrieval", "Balance is null or not in correct format");
-//                                }
-//                            } catch (Exception e) {
-//                                Log.e("ConversionError", "Error converting balance to int", e);
-//                            }
-//                        } else {
-//                            Log.e("DataRetrieval", "No document exists for the user");
-//                        }
-//                    } else {
-//                        Log.e("FirestoreTask", "Task failed with exception", task.getException());
-//                    }
-//                }
-//            });
-//        } else {
-//            // Handle the case where userId is null
-//            Log.e("AuthError", "User ID is null");
-//        }
+        holder.costText.setText(""+mData.get(position).getBasePrice());
 
     }
 
