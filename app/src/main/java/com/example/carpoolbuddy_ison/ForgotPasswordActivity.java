@@ -2,6 +2,7 @@ package com.example.carpoolbuddy_ison;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Objects;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
     private EditText emailField;
@@ -53,25 +56,33 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         String userEmail = emailField.getText().toString();
         String name = nameField.getText().toString();
         String userId = mAuth.getUid();
-        TaskCompletionSource<String> getAllRidesTask = new TaskCompletionSource<>();
 
-        firestore.collection("users").whereEqualTo("open", true)
+
+        firestore.collection("users")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful() && task.getResult() != null) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if ((document.get("email") == userEmail)&&(document.get("name") == name)) {
+                                String email= (String) document.get("email");
+                                String username= (String) document.get("name");
+                                if ((Objects.equals(email, userEmail))&&(Objects.equals(username, name))) {
                                         showToast("succesful");
 
                                         changePassword(document.getId());
+                                        return;
                                 }
                             }
-                        } else {
                             showToast("unsuccesful");
+
                         }
+
                     }
+
                 });
+
+
+
     }
     public void changePassword(String d){
         String newPassword = newPasswordField.getText().toString();
