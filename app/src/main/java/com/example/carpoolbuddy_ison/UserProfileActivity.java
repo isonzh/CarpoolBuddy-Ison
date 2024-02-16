@@ -62,21 +62,18 @@ public class UserProfileActivity extends AppCompatActivity {
                             Log.e("ConversionError", "Error converting snapshot to User", e);
                         }
                     } else {
-                        // 文档不存在的处理
-                        // 例如显示错误信息或日志记录
+
                     }
                 } else {
-                    // 查询失败的处理
-                    // 例如显示错误信息或日志记录
+
                 }
             }
         });
 
-        // 查询并显示用户车辆预定信息
+
         countUserVehicleBookings(userId);
     }
 
-    // 查询用户车辆预定信息并显示在界面上
     private void countUserVehicleBookings(String userId) {
         firestore.collection("vehicles").whereArrayContains("ridersUIDs", userId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -91,7 +88,6 @@ public class UserProfileActivity extends AppCompatActivity {
                     }
                 }
 
-                // 格式化统计结果为字符串
                 StringBuilder resultBuilder = new StringBuilder();
                 resultBuilder.append("Total bookings: ").append(totalBookings).append("\n");
                 for (Map.Entry<String, Integer> entry : typeBookings.entrySet()) {
@@ -100,7 +96,6 @@ public class UserProfileActivity extends AppCompatActivity {
                 resultBuilder.append("Total Carbon saved: ").append(String.format("%.2f", totalBookings * 0.133)).append(" kg").append("\n");
                 resultBuilder.append("Thank you for caring for the environment!");
 
-                // 在 TextView 中显示统计结果
                 String result = resultBuilder.toString();
                 enviroment.setText(result);
             } else {
@@ -109,7 +104,6 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-    // 各种按钮点击事件处理方法
     public void seeVehicles(View v){
         Intent intent = new Intent(this, VehicleInfoActivity.class);
         startActivity(intent);

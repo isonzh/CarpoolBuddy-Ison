@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.carpoolbuddy_ison.classDictionary.User;
@@ -20,14 +21,16 @@ import com.google.firebase.firestore.Transaction;
 
 public class AddBalanceActivity extends AppCompatActivity {
     private TextView balance;
+    private EditText bal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_balance);
 
-        // 初始化TextView
+        // CreateTextView
         balance = findViewById(R.id.balance);
+        bal = findViewById(R.id.editTextNumber);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseFirestore firebase = FirebaseFirestore.getInstance();
@@ -116,6 +119,10 @@ public class AddBalanceActivity extends AppCompatActivity {
     }
 
     public void addBalance(View v) {
-        addBalance(100);
+        int b= (int) Double.parseDouble(bal.getText().toString());
+        addBalance(b);
+        Intent intent = new Intent(this, AddBalanceActivity.class);
+        startActivity(intent);
+
     }
 }

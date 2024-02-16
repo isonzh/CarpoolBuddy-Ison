@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VehicleInfoActivity">
+    tools:context=".VehicleInfoActivity"
+    android:background="@drawable/background">
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button4"

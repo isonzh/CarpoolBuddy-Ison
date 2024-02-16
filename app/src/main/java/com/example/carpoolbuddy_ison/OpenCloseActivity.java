@@ -58,12 +58,10 @@ public class OpenCloseActivity extends AppCompatActivity implements VehiclesInfo
                             Log.e("ConversionError", "Error converting snapshot to User", e);
                         }
                     } else {
-                        // 文档不存在的处理
-                        // 例如显示错误信息或日志记录
+
                     }
                 } else {
-                    // 查询失败的处理
-                    // 例如显示错误信息或日志记录
+
                 }
             }
         });

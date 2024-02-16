@@ -208,66 +208,7 @@ public class CreateUserActivity extends AppCompatActivity {
 
             }
         });
-//
-//        mAuth.createUserWithEmailAndPassword(emailString, passwordString).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//            @Override
-//            public void onComplete(@NonNull Task<AuthResult> task) {
-//                if(task.isSuccessful()){
-//                    Log.d("SIGN UP", "Successfully signed up");
-//                    Toast.makeText(CreateUserActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
-//                    FirebaseUser user = mAuth.getCurrentUser();
-//                    if(roleSelected.equals("Alumni")) {
-//                        String gradYearInt = gradYearField.getText().toString();
-//
-//                        Alumni newUser = new Alumni(String.valueOf(uidGenerator), nameString, emailString, passwordString, roleString, priceMultiplierDoub, ownedVehicles, gradYearInt);
-//                        uidGenerator++;
-//                        firestore.collection("users").document(user.getUid()).set(newUser);
-//                    }
-//                    if(roleSelected.equals("Teacher")) {
-//                        String inSchoolTitleString = inSchoolTitleField.getText().toString();
-//                        Teacher newUser = new Teacher(String.valueOf(uidGenerator), nameString, emailString, passwordString, roleString, priceMultiplierDoub, ownedVehicles, inSchoolTitleString);
-//                        uidGenerator++;
-//                        firestore.collection("users").document(user.getUid()).set(newUser);
-//                    }
-//                    if(roleSelected.equals("Parent")) {
-//                        String childrenUIDsString = childrenUIDsField.getText().toString();
-//
-//                        ArrayList<String> childrenUIDs = new ArrayList<>();
-//                        String[] ids = childrenUIDsString.split(";");
-//                        for(String id : ids){
-//                            childrenUIDs.add((id.trim()));
-//                        }
-//
-//                        Parent newUser = new Parent(String.valueOf(uidGenerator), nameString, emailString, passwordString, roleString, priceMultiplierDoub, ownedVehicles, childrenUIDs);
-//                        uidGenerator++;
-//                        firestore.collection("users").document(user.getUid()).set(newUser);
-//                    }
-//                    if(roleSelected.equals("Student")){
-//                        String gradYearInt = gradYearField.getText().toString();
-//
-//                        String parentUIDsString = parentUIDsField.getText().toString();
-//
-//                        ArrayList<String> parentUIDs = new ArrayList<>();
-//                        String[] ids = parentUIDsString.split(";");
-//
-//                        for(String id : ids){
-//                            parentUIDs.add((id.trim()));
-//                        }
-//
-//                        Student newUser = new Student(String.valueOf(uidGenerator), nameString, emailString, passwordString, roleString, priceMultiplierDoub, ownedVehicles, gradYearInt, parentUIDs);
-//                        uidGenerator++;
-//                        firestore.collection("users").document(user.getUid()).set(newUser);
-//                    }
-//                    updateUI(user);
-//                }
-//                else{
-//                    Log.d("SIGN UP", "createUserWithEmail:failure", task.getException());
-//                    Toast.makeText(CreateUserActivity.this, "Registration failure", Toast.LENGTH_SHORT).show();
-//
-//                    updateUI(null);
-//                }
-//            }
-//        });
+
 
     }
 
