@@ -40,8 +40,8 @@ public class VehicleProfileActivity extends AppCompatActivity implements View.On
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
-        if(getIntent().hasExtra("vehicle")) {
-            selectedVehicle = getIntent().getParcelableExtra("vehicle");
+        if(getIntent().hasExtra("vehicles")) {
+            selectedVehicle = getIntent().getParcelableExtra("vehicles");
 
             vehicleTypeTextView = findViewById(R.id.vehicleTypeDataTextView);
             ownerTextView = findViewById(R.id.ownerDataTextView);
@@ -91,6 +91,7 @@ public class VehicleProfileActivity extends AppCompatActivity implements View.On
                     } else {
                         Log.e("FirestoreTask", "Task failed with exception", task.getException());
                     }
+
                 }
             });
         }
@@ -125,6 +126,7 @@ public class VehicleProfileActivity extends AppCompatActivity implements View.On
                             Intent intent = new Intent(getApplicationContext(), VehicleInfoActivity.class);
                             startActivity(intent);
                             finish();
+
                         }
                     });
         } else {

@@ -60,6 +60,7 @@ public class AddBalanceActivity extends AppCompatActivity {
                     } else {
                         Log.e("FirestoreTask", "Task failed with exception", task.getException());
                     }
+
                 }
             });
         } else {

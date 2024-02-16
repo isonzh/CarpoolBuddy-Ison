@@ -1,6 +1,5 @@
 package com.example.carpoolbuddy_ison;
 
-import com.example.carpoolbuddy_ison.classDictionary.Vehicle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,8 +11,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.carpoolbuddy_ison.classDictionary.Vehicle;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,7 +27,6 @@ public class VehicleProfileOpenCloseActivity extends AppCompatActivity {
     private TextView vehicleTypeTextView;
     private TextView basePriceTextView;
     private TextView bookedUIDs;
-    private Button bookRideButton;
     private LinearLayout layout;
 
     @Override
@@ -39,47 +36,54 @@ public class VehicleProfileOpenCloseActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
+        ownerTextView = findViewById(R.id.ownerDataTextView);
+        modelTextView = findViewById(R.id.modelDataTextView);
+        maxCapacityTextView = findViewById(R.id.maxCapacityDataTextView);
+        remainingCapacityTextView = findViewById(R.id.remainingCapacityDataTextView);
+        basePriceTextView = findViewById(R.id.basePriceDataTextView);
+        bookedUIDs = findViewById(R.id.bookedUIDsDataTextView);
+        vehicleTypeTextView = findViewById(R.id.vehicleTypeDataTextView);
 
-        if(getIntent().hasExtra("vehicle")) {
-            selectedVehicle = getIntent().getParcelableExtra("vehicle");
+        if(getIntent().hasExtra("vehicles")) {
+            selectedVehicle = getIntent().getParcelableExtra("vehicles");
 
-            vehicleTypeTextView = findViewById(R.id.vehicleTypeDataTextView);
-            ownerTextView = findViewById(R.id.ownerDataTextView);
-            modelTextView = findViewById(R.id.modelDataTextView);
-            maxCapacityTextView = findViewById(R.id.maxCapacityDataTextView);
-            remainingCapacityTextView = findViewById(R.id.remainingCapacityDataTextView);
-            basePriceTextView = findViewById(R.id.basePriceDataTextView);
-            bookedUIDs = findViewById(R.id.bookedUIDsDataTextView);
-            TextView openClose =findViewById(R.id.openClose);
-
-            vehicleTypeTextView.setText(selectedVehicle.getVehicleType());
-            ownerTextView.setText(selectedVehicle.getOwner());
-            modelTextView.setText(selectedVehicle.getModel());
-            maxCapacityTextView.setText(String.valueOf(selectedVehicle.getCapacity()));
-            remainingCapacityTextView.setText(String.valueOf(selectedVehicle.getRemainingCapacity()));
-            basePriceTextView.setText(String.valueOf(selectedVehicle.getBasePrice()));
-            bookedUIDs.setText(selectedVehicle.getRidersUIDs().toString());
-            openClose.setText(selectedVehicle.getOpen());
+            if(selectedVehicle != null){
+                ownerTextView.setText(selectedVehicle.getOwner());
+                modelTextView.setText(selectedVehicle.getModel());
+                maxCapacityTextView.setText(String.valueOf(selectedVehicle.getCapacity()));
+                remainingCapacityTextView.setText(String.valueOf(selectedVehicle.getRemainingCapacity()));
+                basePriceTextView.setText(String.valueOf(selectedVehicle.getBasePrice()));
+                bookedUIDs.setText(selectedVehicle.getRidersUIDs().toString());
+                vehicleTypeTextView.setText(selectedVehicle.getVehicleType());
+            }
         }
     }
-
-
 
     public void goToOpenCloseActivity(View V){
         Intent intent = new Intent(this, OpenCloseActivity.class);
         startActivity(intent);
     }
+
     public void Open(View v){
-        firestore.collection("vehicles").document(selectedVehicle.getVehicleID())
-                .update("open", true);
-        Intent intent = new Intent(this, OpenCloseActivity.class);
-        startActivity(intent);
+        updateVehicleStatus(true);
     }
+
     public void Close(View v){
-        firestore.collection("vehicles").document(selectedVehicle.getVehicleID())
-                .update("open", false);
-        Intent intent = new Intent(this, OpenCloseActivity.class);
-        startActivity(intent);
+        updateVehicleStatus(false);
+    }
+
+    private void updateVehicleStatus(boolean isOpen){
+        if(selectedVehicle != null){
+            firestore.collection("vehicles").document(selectedVehicle.getVehicleID())
+                    .update("open", isOpen)
+                    .addOnCompleteListener(task -> {
+                        if(task.isSuccessful()){
+                            Intent intent = new Intent(VehicleProfileOpenCloseActivity.this, OpenCloseActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Log.e("VehicleProfileOpenCloseActivity", "Error updating vehicle status", task.getException());
+                        }
+                    });
+        }
     }
 }
-

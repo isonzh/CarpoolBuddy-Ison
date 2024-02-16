@@ -70,12 +70,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                                         showToast("succesful");
 
                                         changePassword(document.getId());
-                                        return;
+
                                 }
                             }
                             showToast("unsuccesful");
 
                         }
+
 
                     }
 

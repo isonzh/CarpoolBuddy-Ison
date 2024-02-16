@@ -11,12 +11,11 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 
-import com.example.carpoolbuddy_ison.classDictionary.*;
+import com.example.carpoolbuddy_ison.classDictionary.User;
+import com.example.carpoolbuddy_ison.classDictionary.Vehicle;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.FirebaseAuth;
-
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -29,35 +28,32 @@ public class OpenCloseActivity extends AppCompatActivity implements VehiclesInfo
     private FirebaseFirestore firestore;
     private RecyclerView recView;
     private VehiclesInfoAdapter mAdapter;
-
-    //added for testing
+    private FirebaseAuth mAuth;
     private ArrayList<Vehicle> vehiclesList;
-    private String name;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_close);
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
-        recView = (RecyclerView) findViewById(R.id.recView);
-
+        recView = findViewById(R.id.recView);
+        mAuth = FirebaseAuth.getInstance();
         vehiclesList = new ArrayList<>();
-        String userId = mAuth.getUid();
         getVehicles();
+    }
 
-        firestore.collection("users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    public void getVehicles() {
+        firestore.collection("users").document(mAuth.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(Task<DocumentSnapshot> task) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot snapshot = task.getResult();
                     if (snapshot != null && snapshot.exists()) {
                         try {
-//                            User user = snapshot.toObject(User.class);
-                            name = snapshot.getString("name");
-                             // 假设 User 类有 getName 方法
-                            // 其他代码
+                            String name;
+                            User user = snapshot.toObject(User.class);
+                            name = user.getName();
+                            fetchVehiclesFromFirestore(name);
                         } catch (Exception e) {
                             Log.e("ConversionError", "Error converting snapshot to User", e);
                         }
@@ -73,41 +69,29 @@ public class OpenCloseActivity extends AppCompatActivity implements VehiclesInfo
         });
     }
 
-    public void getVehicles() {
-        TaskCompletionSource<String> getAllRidesTask = new TaskCompletionSource<>();
-
-        firestore.collection(Constants.VEHICLE_COLLECTION).whereEqualTo("owner", name)
+    private void fetchVehiclesFromFirestore(String userName) {
+        firestore.collection(Constants.VEHICLE_COLLECTION).whereEqualTo("owner", userName)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful() && task.getResult() != null) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                    vehiclesList.add(document.toObject(Vehicle.class));
+                                vehiclesList.add(document.toObject(Vehicle.class));
                             }
-                            getAllRidesTask.setResult(null);
-                        }
-                        else {
+                            mAdapter = new VehiclesInfoAdapter(vehiclesList, OpenCloseActivity.this);
+                            recView.setAdapter(mAdapter);
+                            recView.setLayoutManager(new LinearLayoutManager(OpenCloseActivity.this));
+                        } else {
                             Log.d("VehiclesInfoActivity", "Error getting documents from db: ", task.getException());
                         }
                     }
                 });
-        getAllRidesTask.getTask().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                mAdapter = new VehiclesInfoAdapter(vehiclesList,OpenCloseActivity.this);
-                recView.setAdapter(mAdapter);
-                recView.setLayoutManager(new LinearLayoutManager(OpenCloseActivity.this));
-            }
-        });
     }
-
-
 
     @Override
     public void onVehicleClick(int position) {
         Intent intent = new Intent(this, VehicleProfileOpenCloseActivity.class);
-        intent.putExtra("vehicle", (Parcelable) vehiclesList.get(position));
+        intent.putExtra("vehicles", (Parcelable) vehiclesList.get(position));
         startActivity(intent);
     }
 

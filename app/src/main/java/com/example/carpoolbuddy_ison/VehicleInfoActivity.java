@@ -60,6 +60,7 @@ public class VehicleInfoActivity extends AppCompatActivity implements VehiclesIn
                         else {
                             Log.d("VehiclesInfoActivity", "Error getting documents from db: ", task.getException());
                         }
+
                     }
                 });
         getAllRidesTask.getTask().addOnCompleteListener(new OnCompleteListener<String>() {
@@ -68,6 +69,7 @@ public class VehicleInfoActivity extends AppCompatActivity implements VehiclesIn
                 mAdapter = new VehiclesInfoAdapter(vehiclesList,VehicleInfoActivity.this);
                 recView.setAdapter(mAdapter);
                 recView.setLayoutManager(new LinearLayoutManager(VehicleInfoActivity.this));
+
             }
         });
     }
@@ -81,7 +83,7 @@ public class VehicleInfoActivity extends AppCompatActivity implements VehiclesIn
     @Override
     public void onVehicleClick(int position) {
         Intent intent = new Intent(this, VehicleProfileActivity.class);
-        intent.putExtra("vehicle", (Parcelable) vehiclesList.get(position));
+        intent.putExtra("vehicles", (Parcelable) vehiclesList.get(position));
         startActivity(intent);
     }
 

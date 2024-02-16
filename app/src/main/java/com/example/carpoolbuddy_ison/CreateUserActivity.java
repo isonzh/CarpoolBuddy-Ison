@@ -144,9 +144,6 @@ public class CreateUserActivity extends AppCompatActivity {
             Toast.makeText(CreateUserActivity.this,"Use a cis email",Toast.LENGTH_SHORT).show();
             return;
         }
-
-
-
         mAuth.createUserWithEmailAndPassword(emailString, passwordString).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -208,6 +205,7 @@ public class CreateUserActivity extends AppCompatActivity {
                     Log.d("SIGN UP", "createUserWithEmail:failure", task.getException());
                     updateUI(null);
                 }
+
             }
         });
 //
